@@ -27,6 +27,7 @@ class CreateTender extends Migration
             $table->dateTime("reqacceptdate")->comment("Дата рассмотрения заявки");
             $table->string("comisaddress")->comment("Место рассмотрения заявки");
             $table->string("purchdochref");
+            $table->integer("purchid");
         });
     }
 
