@@ -17,11 +17,10 @@ class CreateTender extends Migration
             $table->increments('id');
             $table->string('title_tender');
             $table->string('short_description');
-            $table->string('date_publication');
             $table->dateTime("date_deadline");
             $table->dateTime('final_date')->comment("Дата подведения итогов");
-            $table->string("purchfullname")->comment("Полное описание");
-            $table->string("purchaddress")->comment("Место поставки товара, выполнения работ, оказания услуг");
+            $table->text("purchfullname")->comment("Полное описание");
+            $table->text("purchaddress")->comment("Место поставки товара, выполнения работ, оказания услуг");
             $table->string("purchamount");
             $table->string("purchcurrency");
             $table->dateTime("reqacceptdate")->comment("Дата рассмотрения заявки");

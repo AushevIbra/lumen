@@ -2,8 +2,12 @@
 
 use Illuminate\Http\Request;
 
-$router->get('/', function () {
-    $data = json_decode(file_get_contents("https://www.sberbank.ru/portalserver/proxy/?pipe=shortCachePipe&url=http%3A%2F%2Flocalhost%2Fsbt-services%2Fservices%2Frest%2Fast%2FgetPurchaseOpen/47253"));
-    dd($data);
 
-});
+$router->get('/', [
+    'as' => 'index',
+    'uses' => 'ExampleController@index'
+]);
+$router->get('parse', [
+    'as' => 'parse',
+    'uses' => "ExampleController@parse"
+]);
