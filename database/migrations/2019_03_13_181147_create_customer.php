@@ -16,11 +16,7 @@ class CreateCustomer extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->increments('id');
             $table->integer("id_tender")->unsigned();
-            $table->string("custname")->comment("Наименование");
-            $table->string("custaddress");
-            $table->string("custphone");
-            $table->string("custemail");
-            $table->string("custperson");
+            $table->text('body_customer');
 
             $table->foreign('id_tender')->references('id')->on('tenders');
         });

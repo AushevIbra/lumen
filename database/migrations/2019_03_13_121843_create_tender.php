@@ -15,18 +15,9 @@ class CreateTender extends Migration
     {
         Schema::create('tenders', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title_tender');
-            $table->string('short_description');
-            $table->dateTime("date_deadline");
-            $table->dateTime('final_date')->comment("Дата подведения итогов");
-            $table->text("purchfullname")->comment("Полное описание");
-            $table->text("purchaddress")->comment("Место поставки товара, выполнения работ, оказания услуг");
-            $table->string("purchamount");
-            $table->string("purchcurrency");
-            $table->dateTime("reqacceptdate")->comment("Дата рассмотрения заявки");
-            $table->string("comisaddress")->comment("Место рассмотрения заявки");
-            $table->string("purchdochref");
-            $table->integer("purchid");
+            $table->text('body');
+            $table->string('full_url');
+
         });
     }
 

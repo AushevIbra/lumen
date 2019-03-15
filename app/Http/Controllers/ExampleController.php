@@ -9,6 +9,7 @@ class ExampleController extends Controller
 {
 
     public function index(){
+
         $tenders = DB::table('tenders')
             ->leftJoin('customers', 'tenders.id', '=', 'customers.id_tender')
             ->select('*')
@@ -17,29 +18,35 @@ class ExampleController extends Controller
         echo ("<a href='" . route('parse') . "'>Спарсить</a> <br /> <br>" );
 
         foreach ($tenders as $tender) {
-            echo "Название: " . $tender->title_tender . "<br/>";
-            echo "Краткое наименование закупки: " . $tender->short_description . "<br/>";
-            echo "Дата окончания подачи заявок: " . $tender->date_deadline . "<br/>";
-            echo "Дата подведения итогов: " . $tender->final_date . "<br/>";
-            echo "Наименование: " . $tender->custname . "<br/>";
-            echo "Адрес: " . $tender->custaddress . "<br/>";
-            echo "Телефон: " . $tender->custphone . "<br/>";
-            echo "Почта: " . $tender->custemail . "<br/>";
-            echo "Имя: " . $tender->custperson . "<br/>";
-            echo "Описание: " . $tender->purchfullname . "<br/>";
-            echo "Стоимость: " . $tender->purchamount . "<br/>";
-            echo "Место рассмотрения заявки: " . $tender->comisaddress . "<br/>";
-            echo "Полная страница: <a href='https://www.sberbank.ru/ru/fpartners/purchase/notification?id=" . $tender->purchid . "'> Перейти </a>";
+            echo <<<HTML
+            <div style="display: flex; justify-content: space-around;">
+                <div>
+                    Извещение: <br />
+                    $tender->body
+                </div>
+                <div>
+                    Заказчик: <br />
+                    $tender->body_customer
+                    <hr>
+                    Полный адрес: <br/>
+                    <a href="$tender->full_url">Перейти</a>
+                </div>
+            </div>
+
+HTML;
+
             echo "<hr />";
         }
     }
     public function parse(){
-        $tenders = json_decode(file_get_contents("https://www.sberbank.ru/portalserver/proxy/?pipe=shortCachePipe&url=http%3A%2F%2Flocalhost%2Fsbt-services%2Fservices%2Frest%2Fast%2FgetPublicPurchaseList%3FpageNum%3D2%26hash%3D3023486277"));
+        $data = json_decode(file_get_contents("http://localhost:3000/"));
 
-        foreach ($tenders->purchase as $item) {
-            $data = json_decode(file_get_contents("https://www.sberbank.ru/portalserver/proxy/?pipe=shortCachePipe&url=http%3A%2F%2Flocalhost%2Fsbt-services%2Fservices%2Frest%2Fast%2FgetPurchaseOpen/" . $item->purchID));
-            $tender = Tender::add($data->purchase);
-            $customer = Customer::add($tender, $data->purchase->customer);
+        foreach ($data->ids as $temp) {
+            //sleep(5);
+            $id = preg_replace("/[^,.0-9]/", '', $temp);
+            $response = json_decode(file_get_contents("http://localhost:3000/parse/" . $id));
+            $tender = Tender::add($response->html, "https://www.sberbank.ru/ru/fpartners/purchase/notification" . $temp);
+            $customer = Customer::add($tender, $response->customer);
         }
         return redirect('/');
     }

@@ -9,11 +9,7 @@ class Customer extends Model {
     public static function add($id_tender, $customer) {
         $model = new Customer();
         $model->id_tender = $id_tender;
-        $model->custname = $customer->custname;
-        $model->custaddress = $customer->custaddress;
-        $model->custphone = $customer->custphone;
-        $model->custemail = $customer->custemail;
-        $model->custperson = $customer->custperson;
+        $model->body_customer = $customer;
         $model->save();
     }
 }
